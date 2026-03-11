@@ -1,2 +1,2 @@
-# git-assignment
-Git Practice Assignment
+# Assignment
+All Practice Assignment
