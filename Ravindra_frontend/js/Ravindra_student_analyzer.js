@@ -88,3 +88,28 @@ for (let subject in highest) {
     `Highest in ${subject}: ${highest[subject].name} (${highest[subject].score})`,
   );
 }
+
+// 4. SUBJECT-WISE AVERAGE
+// some as previous code only calculation logic change
+function getSubjectAverage(students) {
+  let data = {};
+  students.forEach((student) => {
+    student.marks.forEach((mark) => {
+      let subject = mark.subject;
+      if (!data[subject]) {
+        // make the subject as key
+        data[subject] = { total: 0, count: 0 }; // default value
+      }
+      data[subject].total += mark.score; // value of each subject total
+      data[subject].count++; // how many some subject value
+    });
+  });
+  return data;
+}
+
+let avgData = getSubjectAverage(students);
+// iterate the each subject and apply avg logic
+for (let subject in avgData) {
+  let avg = avgData[subject].total / avgData[subject].count;
+  console.log(`Average ${subject} Score: ${avg.toFixed(2)}`);
+}
