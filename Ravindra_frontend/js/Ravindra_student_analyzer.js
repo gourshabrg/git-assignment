@@ -23,7 +23,7 @@ const students = [
     attendance: 91,
   },
 ];
-
+//1. TOTAL MARKS
 // this function take one student object and iterate  marks array of object each element and calculate the  total marks
 function getTotalMarks(student) {
   let total = 0;
@@ -33,6 +33,21 @@ function getTotalMarks(student) {
   return total;
 }
 // loop student array of objects and iterate each element  and print one by one its name and marks
+// call the getTotalMarks and print output
 for (let student of students) {
   console.log(`${student.name} total marks ${getTotalMarks(student)}`);
 }
+
+//2. AVERAGE MARKS
+// some as above iterate  marks array of object
+// here we can use the pre function fro gating the total marks and then divide by to total length of student marks array
+function getAverageMarks(student) {
+  let total = getTotalMarks(student);
+  return total / student.marks.length;
+}
+
+// student array of objects and iterate each element
+//  call the getAverageMarks or print output
+students.forEach((student) => {
+  console.log(`${student.name} Average: ${getAverageMarks(student)}`);
+});
