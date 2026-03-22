@@ -22,3 +22,17 @@ footer {
   margin: 20px auto;
   padding: 15px;
 }
+
+/* header style */
+header {
+  text-align: center;
+  background-color: #e3f2fd;
+  border-radius: 10px;
+}
+
+header img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
