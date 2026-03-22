@@ -12,3 +12,13 @@ body {
   color: #333;
   line-height: 1.6;
 }
+
+/* Container spacing */
+header,
+nav,
+section,
+footer {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 15px;
+}
