@@ -67,3 +67,17 @@ function deleteProduct(id) {
   saveData();
   update();
 }
+
+// edit the product
+// its take the id of that product to edit
+// and put the value into the form then we can edit it
+function editProduct(id) {
+  let p = products.find((x) => x.id === id);
+
+  document.getElementById("name").value = p.name;
+  document.getElementById("price").value = p.price;
+  document.getElementById("stock").value = p.stock;
+  document.getElementById("categoryInput").value = p.category;
+
+  editId = id;
+}
