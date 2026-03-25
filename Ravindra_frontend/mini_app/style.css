@@ -122,3 +122,13 @@ button {
 button:hover {
   background: #005fa3;
 }
+
+/* pagination */
+#pagination {
+  text-align: center;
+  margin: 25px 0;
+}
+
+#pagination button {
+  margin: 5px;
+}
