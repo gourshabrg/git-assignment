@@ -167,3 +167,10 @@ function updateAnalytics() {
   let out = products.filter((p) => p.stock === 0).length;
   document.getElementById("out").innerText = out;
 }
+
+// update UI after analytics
+function update() {
+  currentPage = 1;
+  applyFilters();
+  updateAnalytics();
+}
