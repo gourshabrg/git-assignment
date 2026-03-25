@@ -174,3 +174,16 @@ function update() {
   applyFilters();
   updateAnalytics();
 }
+
+// pagination controls
+function nextPage() {
+  currentPage++;
+  applyFilters();
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    applyFilters();
+  }
+}
