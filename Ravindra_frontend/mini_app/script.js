@@ -59,3 +59,11 @@ function renderProducts(data) {
   document.getElementById("pageInfo").innerText =
     `Page ${currentPage} of ${Math.ceil(data.length / itemsPerPage)}`;
 }
+
+// this function take the id of product
+// apply the filter method on products array its return the array of those object that id is not equal to given id
+function deleteProduct(id) {
+  products = products.filter((p) => p.id !== id);
+  saveData();
+  update();
+}
