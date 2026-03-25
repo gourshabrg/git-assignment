@@ -187,3 +187,9 @@ function prevPage() {
     applyFilters();
   }
 }
+
+// events added like search , sort any thing happen it call the update function
+document.getElementById("search").addEventListener("input", update);
+document.getElementById("category").addEventListener("change", update);
+document.getElementById("sort").addEventListener("change", update);
+document.getElementById("lowStock").addEventListener("change", update);
