@@ -56,3 +56,24 @@ header h1 {
 .controls select:focus {
   border-color: #0077cc;
 }
+
+/*  analytics section*/
+.analytics {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.analytics div {
+  background: #ffffff;
+  padding: 18px 30px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 180px;
+
+  font-weight: 500;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
