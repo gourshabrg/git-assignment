@@ -19,7 +19,7 @@ function saveData() {
 
 // pagination
 let currentPage = 1;
-let itemsPerPage = 4; // number of item display
+let itemsPerPage = 10; // number of item display
 
 // edit tracking
 let editId = null;

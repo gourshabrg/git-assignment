@@ -1,1 +1,6 @@
-/* css */
+/* global adding for the remove default browser spacing   */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
