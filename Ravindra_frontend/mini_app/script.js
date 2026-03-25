@@ -11,3 +11,8 @@ let defaultProducts = [
 
 // Load from localStorage or default
 let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
+
+// Save to localStorage
+function saveData() {
+  localStorage.setItem("products", JSON.stringify(products));
+}
