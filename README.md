@@ -1,3 +1,5 @@
-# This Reposetry contain all the assignement
+# This Repository contain all the assignment
 
-github - Done
+Github - Done
+Linux - Done
+All frontend - Done
