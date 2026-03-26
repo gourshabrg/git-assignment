@@ -74,21 +74,40 @@ Pagination helps in managing large product lists by dividing them into pages.
 
 Show the data loading in local storage.
 
-![Pagination Screenshot](./assets/loading.png)
+![Loading Screenshot](./assets/loading.png)
 
 **Description:**
 This is show the data loading just like data is fetch by backend take some time that time loader is show.
 
 ---
 
-### 5. Low Stock
+### 6. Low Stock
 
 Show the low stock .
 
-![Pagination Screenshot](./assets/lowstock.png)
+![Low Stock Screenshot](./assets/lowstock.png)
 
 **Description:**
 This is show low stock products that is the product quantity is less than 5 that is low stock product.
+
+---
+
+### 7. Local Storage
+
+Save data in local storage for persistent.
+
+![Local storage Screenshot](./assets/localstorage.png)
+
+**Description:**
+save data in browser local storage for persistent data we did not lose when we refresh or exit the page.
+
+---
+
+### 8. Responsive Design
+
+UI is responsive for different size of screen.
+
+![Responsive Design Screenshot](./assets/Responsive.png)
 
 ---
 
