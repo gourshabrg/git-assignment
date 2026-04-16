@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.SpringCoreAssignment.component.MessageFormatter;
+import com.example.springcoreassignment.component.MessageFormatter;
 
 // Service to manage messages using different formatters
 @Service
