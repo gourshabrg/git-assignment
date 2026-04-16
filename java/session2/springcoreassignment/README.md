@@ -45,7 +45,7 @@ component/    → Reusable logic
 | /users      | POST   | Create user    |
 | /users/{id} | GET    | Get user by ID |
 
-👉 Uses in-memory storage (no database)
+Uses in-memory storage (no database)
 
 ---
 
@@ -82,7 +82,7 @@ Uses multiple components:
 
 ---
 
-## ▶ How to Run
+## How to Run
 
 1. Open project in VS Code
 2. Open terminal
@@ -100,7 +100,7 @@ http://localhost:8080
 
 ---
 
-## 🧪 Testing APIs
+## Testing APIs
 
 Use Postman or browser:
 
