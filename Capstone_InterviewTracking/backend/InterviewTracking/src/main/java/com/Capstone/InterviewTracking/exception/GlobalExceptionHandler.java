@@ -1,52 +1,62 @@
 package com.Capstone.InterviewTracking.exception;
 
-import org.springframework.http.*;
+import com.Capstone.InterviewTracking.dto.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Map;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult()
+    public ResponseEntity<ApiResponse<Void>> handleValidation(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .findFirst()
                 .map(error -> error.getDefaultMessage())
-                .orElse("Invalid request");
+                .distinct()
+                .toList();
 
-        return ResponseEntity.badRequest().body(Map.of("message", message));
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.failure("Validation failed", errors));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidRequestBody() {
+    public ResponseEntity<ApiResponse<Void>> handleInvalidRequestBody() {
         return ResponseEntity
                 .badRequest()
-                .body(Map.of("message", "Invalid request body"));
+                .body(ApiResponse.failure("Invalid request body"));
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex) {
-        String message = ex.getMessage();
-
-        if ("User not found".equals(message) || "Invalid password".equals(message)) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Invalid email or password"));
-        }
-
-        if ("Email already registered".equals(message)) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", message));
-        }
-
+    @ExceptionHandler({UserNotFoundException.class, InvalidCredentialsException.class})
+    public ResponseEntity<ApiResponse<Void>> handleInvalidCredentials(RuntimeException ex) {
         return ResponseEntity
-                .badRequest()
-                .body(Map.of("message", message == null ? "Request failed" : message));
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.failure("Invalid email or password"));
+    }
+
+    @ExceptionHandler(EmailAlreadyRegisteredException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEmailAlreadyRegistered(EmailAlreadyRegisteredException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.failure(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception ex) {
+        LOGGER.error("Unexpected request failure", ex);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.failure("Request failed"));
     }
 }

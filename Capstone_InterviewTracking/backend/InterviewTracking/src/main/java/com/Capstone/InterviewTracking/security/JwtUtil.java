@@ -1,7 +1,12 @@
 package com.Capstone.InterviewTracking.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +17,13 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
+
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.expiration-ms:86400000}")
+    private long expirationMs;
 
     private Key getSigningKey() {
         if (secret == null || secret.isBlank()) {
@@ -24,13 +34,16 @@ public class JwtUtil {
     }
 
     public String generateToken(String email, String role) {
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+        LOGGER.info("Generated JWT token for email: {}", email);
+        return token;
     }
 
     public String extractEmail(String token) {
@@ -42,11 +55,16 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token) {
-        return !getClaims(token).getExpiration().before(new Date());
+        try {
+            return !getClaims(token).getExpiration().before(new Date());
+        } catch (JwtException | IllegalArgumentException ex) {
+            LOGGER.warn("JWT validation failed: {}", ex.getMessage());
+            return false;
+        }
     }
 
     private Claims getClaims(String token) {
-        return Jwts.parserBuilder()   
+        return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
