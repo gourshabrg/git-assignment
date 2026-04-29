@@ -1,0 +1,83 @@
+package com.Capstone.InterviewTracking.service.impl;
+
+import com.Capstone.InterviewTracking.dto.AuthRequest;
+import com.Capstone.InterviewTracking.dto.AuthResponse;
+import com.Capstone.InterviewTracking.entity.User;
+import com.Capstone.InterviewTracking.exception.EmailAlreadyRegisteredException;
+import com.Capstone.InterviewTracking.exception.InvalidCredentialsException;
+import com.Capstone.InterviewTracking.exception.UserNotFoundException;
+import com.Capstone.InterviewTracking.mapper.UserMapper;
+import com.Capstone.InterviewTracking.repository.UserRepository;
+import com.Capstone.InterviewTracking.security.JwtUtil;
+import com.Capstone.InterviewTracking.service.AuthService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthServiceImpl implements AuthService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
+
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+
+    public AuthServiceImpl(UserRepository userRepository,
+                           JwtUtil jwtUtil,
+                           PasswordEncoder passwordEncoder,
+                           UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+    }
+
+    @Override
+    public AuthResponse register(AuthRequest request) {
+        String email = request.getEmail().trim().toLowerCase();
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            LOGGER.warn("Registration failed because email already exists: {}", email);
+            throw new EmailAlreadyRegisteredException("Email already registered");
+        }
+
+        User user = userMapper.toUser(request, email, passwordEncoder);
+        userRepository.save(user);
+        LOGGER.info("Registered user with email: {}", email);
+
+        String token = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole().name()
+        );
+
+        return new AuthResponse(token, user.getEmail(), user.getRole().name());
+    }
+
+    @Override
+    public AuthResponse login(AuthRequest request) {
+        String email = request.getEmail().trim().toLowerCase();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    LOGGER.warn("Login failed because user was not found: {}", email);
+                    return new UserNotFoundException("User not found");
+                });
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            LOGGER.warn("Login failed because password was invalid for email: {}", email);
+            throw new InvalidCredentialsException("Invalid password");
+        }
+
+        LOGGER.info("User logged in successfully: {}", email);
+        String token = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole().name()
+        );
+
+        return new AuthResponse(token, user.getEmail(), user.getRole().name());
+    }
+}

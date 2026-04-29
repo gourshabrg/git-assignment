@@ -1,0 +1,16 @@
+package com.Capstone.InterviewTracking.controller;
+
+import com.Capstone.InterviewTracking.constant.AppConstants;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(AppConstants.CANDIDATE_BASE_PATH)
+public class CandidateController {
+
+    @GetMapping(AppConstants.TEST_PATH)
+    public String test() {
+        return "Candidate access success";
+    }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="../../styles/auth.css">
+</head>
+
+<body>
+  <main class="auth-page">
+    <section class="auth-panel">
+      <div class="auth-brand">
+        <span class="brand-mark">IT</span>
+        <div>
+          <p class="eyebrow">Interview Tracking System</p>
+          <h1>Welcome back</h1>
+        </div>
+      </div>
+
+
+
+      <form id="login-form" class="auth-form">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p id="error" class="error-message"></p>
+
+      <p class="auth-link">
+        New here? <a href="signup.html">Create an account</a>
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="../../scripts/main/auth-controller.js"></script>
+
+</body>
+
+</html>
