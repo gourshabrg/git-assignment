@@ -3,6 +3,9 @@ package com.Capstone.InterviewTracking.entity;
 import com.Capstone.InterviewTracking.enums.*;
 import jakarta.persistence.*;
 
+/**
+ * Candidate profile and hiring pipeline details linked with a job description and user account.
+ */
 @Entity
 @Table(name = "candidate")
 public class Candidate extends BaseEntity {
