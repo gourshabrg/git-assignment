@@ -52,6 +52,13 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.failure(ex.getMessage()));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.failure(ex.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception ex) {
         LOGGER.error("Unexpected request failure", ex);
