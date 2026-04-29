@@ -1,35 +1,22 @@
-package com.Capstone.InterviewTracking.entity;
+package com.Capstone.InterviewTracking.dto;
 
 import com.Capstone.InterviewTracking.enums.JobType;
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "job_description")
-public class JobDescription extends BaseEntity {
+public class JobDescriptionResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String description;
     private String skills;
     private String location;
-
     private Double minSalary;
     private Double maxSalary;
-
     private Integer minExperience;
     private Integer maxExperience;
-
-    @Enumerated(EnumType.STRING)
     private JobType jobType;
-
-    private boolean active = true;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private User createdBy;
+    private boolean active;
+    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;
@@ -119,11 +106,11 @@ public class JobDescription extends BaseEntity {
         this.active = active;
     }
 
-    public User getCreatedBy() {
-        return createdBy;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

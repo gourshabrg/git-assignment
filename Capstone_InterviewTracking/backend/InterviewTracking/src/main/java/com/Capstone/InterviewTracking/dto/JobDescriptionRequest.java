@@ -1,43 +1,38 @@
-package com.Capstone.InterviewTracking.entity;
+package com.Capstone.InterviewTracking.dto;
 
 import com.Capstone.InterviewTracking.enums.JobType;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
-@Entity
-@Table(name = "job_description")
-public class JobDescription extends BaseEntity {
+public class JobDescriptionRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @NotBlank(message = "Job title is required")
     private String title;
+
+    @NotBlank(message = "Job description is required")
     private String description;
+
+    @NotBlank(message = "Skills are required")
     private String skills;
+
+    @NotBlank(message = "Location is required")
     private String location;
 
+    @PositiveOrZero(message = "Minimum salary cannot be negative")
     private Double minSalary;
+
+    @PositiveOrZero(message = "Maximum salary cannot be negative")
     private Double maxSalary;
 
+    @PositiveOrZero(message = "Minimum experience cannot be negative")
     private Integer minExperience;
+
+    @PositiveOrZero(message = "Maximum experience cannot be negative")
     private Integer maxExperience;
 
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Job type is required")
     private JobType jobType;
-
-    private boolean active = true;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private User createdBy;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -109,21 +104,5 @@ public class JobDescription extends BaseEntity {
 
     public void setJobType(JobType jobType) {
         this.jobType = jobType;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
     }
 }

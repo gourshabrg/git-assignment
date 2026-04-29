@@ -3,6 +3,7 @@ package com.Capstone.InterviewTracking.security;
 import com.Capstone.InterviewTracking.constant.AppConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +32,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers(AppConstants.AUTH_MATCHER).permitAll()
+                    .requestMatchers(HttpMethod.GET, AppConstants.JOB_MATCHER).permitAll()
+                    .requestMatchers(AppConstants.JOB_MATCHER).hasRole("HR")
                     .requestMatchers(AppConstants.HR_MATCHER).hasRole("HR")
                     .requestMatchers(AppConstants.PANEL_MATCHER).hasRole("PANEL")
                     .requestMatchers(AppConstants.CANDIDATE_MATCHER).hasRole("CANDIDATE")
