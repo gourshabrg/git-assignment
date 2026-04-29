@@ -1,16 +1,11 @@
-// LOGIN
-const loginForm = document.getElementById("loginForm");
+import { loginApi, signupApi } from "../api/auth-api.js";
+import { saveAuthUser, saveToken } from "../utils/storage.js";
+
+const loginForm = document.getElementById("login-form");
 
 if (loginForm) {
-  const prefill = getSignupLoginPrefill();
-
-  if (prefill.email && prefill.password) {
-    document.getElementById("email").value = prefill.email;
-    document.getElementById("password").value = prefill.password;
-  }
-
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -34,12 +29,11 @@ if (loginForm) {
   });
 }
 
-// SIGNUP
-const signupForm = document.getElementById("signupForm");
+const signupForm = document.getElementById("signup-form");
 
 if (signupForm) {
-  signupForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  signupForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -50,9 +44,8 @@ if (signupForm) {
       error.innerText = "";
 
       await signupApi({ email, password, role });
-      saveSignupLoginPrefill(email, password);
 
-      alert("Signup success");
+      alert("Account created. Please check your email for the password setup link.");
       window.location.href = "login.html";
     } catch (err) {
       console.error(err);
