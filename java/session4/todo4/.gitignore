@@ -31,3 +31,29 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+target/
+*.log
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# H2 DB
+*.mv.db
+*.trace.db
+
+# Logs
+logs/
+
+# Temp
+tmp/
