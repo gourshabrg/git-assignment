@@ -12,6 +12,8 @@ import com.Capstone.InterviewTracking.mapper.UserMapper;
 import com.Capstone.InterviewTracking.repository.UserRepository;
 import com.Capstone.InterviewTracking.security.JwtUtil;
 import com.Capstone.InterviewTracking.service.AuthService;
+import com.Capstone.InterviewTracking.service.EmailServiceImpl;
+import com.Capstone.InterviewTracking.constant.AppConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
 
             String verificationToken = UUID.randomUUID().toString();
             user.setVerificationToken(verificationToken);
-            user.setTokenExpiry(LocalDateTime.now().plusMinutes(15));
+            user.setTokenExpiry(LocalDateTime.now().plusMinutes(AppConstants.SET_TOKEN_EXPIRY));
 
             userRepository.save(user);
 
@@ -82,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
 
     user.setVerificationToken(verificationToken);
     user.setVerified(false);
-    user.setTokenExpiry(LocalDateTime.now().plusMinutes(15));
+    user.setTokenExpiry(LocalDateTime.now().plusMinutes(AppConstants.SET_TOKEN_EXPIRY));
 
     userRepository.save(user);
 
