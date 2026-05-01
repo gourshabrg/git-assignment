@@ -16,4 +16,14 @@ public class UserMapper {
         user.setRole(request.getRole() == null ? RoleType.CANDIDATE : request.getRole());
         return user;
     }
+// For signup without password
+    public User toUserForSignup(String normalizedEmail, RoleType role) {
+        User user = new User();
+        user.setEmail(normalizedEmail);
+        user.setRole(role == null ? RoleType.CANDIDATE : role);
+
+        user.setVerified(false);
+
+        return user;
+    }
 }

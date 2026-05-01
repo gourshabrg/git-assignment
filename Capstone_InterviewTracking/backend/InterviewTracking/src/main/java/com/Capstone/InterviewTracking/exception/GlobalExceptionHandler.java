@@ -28,7 +28,10 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(ApiResponse.failure("Validation failed", errors));
+                .body(ApiResponse.failure(
+        "Validation failed",
+        errors
+));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -42,7 +45,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleInvalidCredentials(RuntimeException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.failure("Invalid email or password"));
+                .body(ApiResponse.failure("Invalid email or password") );
     }
 
     @ExceptionHandler(EmailAlreadyRegisteredException.class)
@@ -66,4 +69,13 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.failure("Request failed"));
     }
+
+    @ExceptionHandler(EmailSendingException.class)
+public ResponseEntity<ApiResponse<Void>> handleEmailError(EmailSendingException ex) {
+
+    return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ApiResponse.failure(ex.getMessage()));
 }
+}
+

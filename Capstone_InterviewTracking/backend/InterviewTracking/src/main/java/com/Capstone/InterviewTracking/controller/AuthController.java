@@ -5,6 +5,7 @@ import com.Capstone.InterviewTracking.dto.ApiResponse;
 import com.Capstone.InterviewTracking.dto.AuthRequest;
 import com.Capstone.InterviewTracking.dto.AuthResponse;
 import com.Capstone.InterviewTracking.service.AuthService;
+import com.Capstone.InterviewTracking.dto.SignupRequest;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping(AppConstants.AUTH_BASE_PATH)
@@ -29,13 +32,28 @@ public class AuthController {
     }
 
     @PostMapping(AppConstants.REGISTER_PATH)
-    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody SignupRequest request) {
         LOGGER.info("Register request received for email: {}", request.getEmail());
-        AuthResponse response = authService.register(request);
+        authService.register(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Registration successful", response));
+                .body(ApiResponse.success("Registration successful", null));
     }
+
+    @PostMapping(AppConstants.SET_PASSWORD_PATH)
+public ResponseEntity<ApiResponse<String>> setPassword(@RequestBody Map<String, String> body) {
+
+    String token = body.get("token");
+    String password = body.get("password");
+
+    LOGGER.info("Set password request received for token: {}", token);
+
+    authService.setPassword(token, password);
+
+    return ResponseEntity.ok(
+            ApiResponse.success("Password set successfully", null)
+    );
+}
 
     @PostMapping(AppConstants.LOGIN_PATH)
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody AuthRequest request) {
