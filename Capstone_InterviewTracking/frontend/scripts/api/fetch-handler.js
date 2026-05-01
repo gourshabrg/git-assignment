@@ -1,20 +1,26 @@
 import { getToken } from "../utils/storage.js";
+import { SITE_CONFIG } from "../config/site-config.js";
 
 export async function fetchHandler(path, options = {}) {
   const headers = new Headers(options.headers || {});
   const token = getToken();
 
+  // Set content type
   if (!headers.has("Content-Type") && options.body) {
     headers.set("Content-Type", "application/json");
   }
 
+  // Add auth token if available
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(path, {
+  const url = `${SITE_CONFIG.API_URL}${path}`;
+
+  const response = await fetch(url, {
     ...options,
     headers,
+    body: options.body ? JSON.stringify(options.body) : null,
   });
 
   const data = await readResponse(response);

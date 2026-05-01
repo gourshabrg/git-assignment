@@ -1,3 +1,3 @@
 export const SITE_CONFIG = {
-  apiUrl: "http://localhost:8080",
+  API_URL: "http://localhost:8080",
 };

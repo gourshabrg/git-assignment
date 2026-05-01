@@ -11,6 +11,7 @@
 <body>
   <main class="auth-page">
     <section class="auth-panel">
+      <!-- <button class="home-btn" id="home-btn">Home</button> -->
       <div class="auth-brand">
         <span class="brand-mark">IT</span>
         <div>
@@ -20,20 +21,22 @@
       </div>
 
 
-      <form id="signup-form" class="auth-form">
+      <form id="signup-form" class="auth-form form-container">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Full Name" required />
         <label for="email">Email address</label>
         <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
+        <label for="phone">Password</label>
+        <input type="tel" id="phone" placeholder="Phone Number" required />
 
-        <label for="role">Account type</label>
-        <select id="role" required>
-          <option value="CANDIDATE">Candidate</option>
-          <option value="HR">HR</option>
-        </select>
+        <label>Date of Birth</label>
+        <input type="date" id="dob" required />
 
-        <button type="submit">Send setup link</button>
+        <button type="submit" id="signup-btn">
+          <span id="btn-text">Send setup link</span>
+          <span id="loader" class="loader hidden"></span>
+        </button>
       </form>
 
       <p id="error" class="error-message"></p>
