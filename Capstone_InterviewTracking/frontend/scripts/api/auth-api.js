@@ -1,22 +1,23 @@
-import { SITE_CONFIG } from "../config/site-config.js";
 import { fetchHandler } from "./fetch-handler.js";
-
-const API_BASE_URL = SITE_CONFIG.apiUrl;
-
-if (!API_BASE_URL) {
-  throw new Error("API base URL is not configured");
-}
+import { SITE_CONFIG } from "../config/site-config.js";
 
 export function loginApi(data) {
-  return fetchHandler(`${API_BASE_URL}/auth/login`, {
+  return fetchHandler(SITE_CONFIG.ENDPOINTS_AUTH.LOGIN, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
   });
 }
 
 export function signupApi(data) {
-  return fetchHandler(`${API_BASE_URL}/auth/register`, {
+  return fetchHandler(SITE_CONFIG.ENDPOINTS_AUTH.SIGNUP, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
+  });
+}
+
+export function setPasswordApi(data) {
+  return fetchHandler(SITE_CONFIG.ENDPOINTS_AUTH.SET_PASSWORD, {
+    method: "POST",
+    body: data,
   });
 }

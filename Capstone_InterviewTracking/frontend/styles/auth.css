@@ -12,6 +12,71 @@ body {
     #f7fafc;
 }
 
+/* Header for top-right button */
+.auth-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.home-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  background: transparent;
+  color: #0f766e;
+  border: 1px solid #0f766e;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.home-btn:hover {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+/* Home button */
+/* .home-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #0f766e;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+} */
+
+/* Loader */
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Blur effect */
+.blur {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .auth-page {
   min-height: 100vh;
   display: grid;
