@@ -26,7 +26,7 @@ public final class AppConstants {
     public static final String ROLE_PREFIX = "ROLE_";
     public static final String ALL_PATHS = "/**";
 
-    public static final String EMAIL_LINK_STRING = "http://localhost:5500/pages/set-password.html?token=";
+    public static final String EMAIL_LINK_STRING = "http://127.0.0.1:5500/Capstone_InterviewTracking/frontend/pages/auth/set-password.html?token=";
     public static final String EMAIL_SUBJECT = "Complete Your Account Setup – Set Your Password";
     public static final Integer SET_TOKEN_EXPIRY = 15; 
   
