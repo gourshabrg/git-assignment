@@ -1,4 +1,4 @@
-import { loginApi, signupApi } from "../api/auth-api.js";
+import { loginApi, signupApi, setPasswordApi } from "../api/auth-api.js";
 import { saveAuthUser, saveToken } from "../utils/storage.js";
 
 const loginForm = document.getElementById("login-form");
@@ -14,18 +14,9 @@ if (loginForm) {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const error = document.getElementById("error");
-    const gender = document.getElementById("gender").value;
 
     error.innerText = "";
 
-    if (!/^[0-9]{10}$/.test(phone)) {
-      error.innerText = "Enter valid 10 digit mobile number";
-      return;
-    }
-    if (!gender) {
-      error.innerText = "Please select gender";
-      return;
-    }
     try {
       const data = await loginApi({ email, password });
       saveToken(data.token);
@@ -52,6 +43,7 @@ if (signupForm) {
     const phone = document.getElementById("phone").value;
     const dob = document.getElementById("dob").value;
     const error = document.getElementById("error");
+    const gender = document.getElementById("gender").value;
 
     if (new Date(dob) > new Date()) {
       alert("Date of birth cannot be in future");
@@ -64,12 +56,18 @@ if (signupForm) {
       signupBtn.disabled = true;
       formContainer.classList.add("blur");
 
-      await signupCandidate({ name, email, phone, dob });
+      await signupApi({ fullName: name, email, phone, dob, gender });
 
-      alert("Verification email sent!");
+      alert("Verification email sent set password and login !");
       window.location.href = "login.html";
-    } catch (error) {
-      alert("Signup failed");
+    } catch (err) {
+      // alert("Signup failed");
+      console.error(err);
+      if (err.message) {
+        error.innerText = err.message;
+      } else {
+        error.innerText = "Something went wrong";
+      }
     } finally {
       //  STOP LOADING
       loader.classList.add("hidden");
@@ -87,14 +85,6 @@ if (loginLink) {
     window.location.href = "login.html";
   });
 }
-
-// Home page
-// const homeBtn = document.getElementById("home-btn");
-// if (homeBtn) {
-//   homeBtn.addEventListener("click", () => {
-//     window.location.href = "../index.html";
-//   });
-// }
 
 // ================= SET PASSWORD =================
 
