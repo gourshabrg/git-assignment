@@ -14,10 +14,19 @@ if (loginForm) {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const error = document.getElementById("error");
+    const gender = document.getElementById("gender").value;
 
+    error.innerText = "";
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+      error.innerText = "Enter valid 10 digit mobile number";
+      return;
+    }
+    if (!gender) {
+      error.innerText = "Please select gender";
+      return;
+    }
     try {
-      error.innerText = "";
-
       const data = await loginApi({ email, password });
       saveToken(data.token);
       saveAuthUser({
@@ -80,9 +89,55 @@ if (loginLink) {
 }
 
 // Home page
-const homeBtn = document.getElementById("home-btn");
-if (homeBtn) {
-  homeBtn.addEventListener("click", () => {
-    window.location.href = "../index.html";
+// const homeBtn = document.getElementById("home-btn");
+// if (homeBtn) {
+//   homeBtn.addEventListener("click", () => {
+//     window.location.href = "../index.html";
+//   });
+// }
+
+// ================= SET PASSWORD =================
+
+const setPasswordForm = document.getElementById("set-password-form");
+
+if (setPasswordForm) {
+  setPasswordForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+    const error = document.getElementById("error");
+
+    //  get token from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
+    error.innerText = "";
+
+    if (!token) {
+      error.innerText = "Invalid or missing token";
+      return;
+    }
+
+    if (password.length < 6) {
+      error.innerText = "Password must be at least 6 characters";
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      error.innerText = "Passwords do not match";
+      return;
+    }
+
+    try {
+      await setPasswordApi({ token, password });
+
+      alert("Password set successfully!");
+
+      window.location.href = "login.html";
+    } catch (err) {
+      console.error(err);
+      error.innerText = err.message;
+    }
   });
 }
