@@ -15,6 +15,11 @@ public final class AppConstants {
     public static final String SET_PASSWORD_PATH = "/set-password";
     public static final String TEST_PATH = "/test";
 
+    public static final String JOB_HR_PATH = JOB_BASE_PATH + "/hr";
+    public static final String JOB_TOGGLE_PATH = JOB_BASE_PATH + "/*/toggle";
+    public static final String JOB_LIST_PATH = JOB_BASE_PATH;          
+    public static final String JOB_BY_ID_PATH = JOB_BASE_PATH + "/*";
+
     public static final String AUTH_MATCHER = AUTH_BASE_PATH + "/**";
     public static final String HR_MATCHER = HR_BASE_PATH + "/**";
     public static final String PANEL_MATCHER = PANEL_BASE_PATH + "/**";
