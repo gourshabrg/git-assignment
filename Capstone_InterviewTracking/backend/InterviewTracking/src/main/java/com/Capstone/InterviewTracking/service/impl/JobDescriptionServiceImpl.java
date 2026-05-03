@@ -68,4 +68,92 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
             throw new BadRequestException(fieldName + " minimum cannot be greater than maximum");
         }
     }
+
+    @Override
+    public JobDescriptionResponse update(Long id, JobDescriptionRequest request, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (!user.getRole().name().equals("HR")) {
+            throw new BadRequestException("Only HR can update job descriptions");
+        }
+
+        JobDescription jd = jobDescriptionRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Job not found"));
+
+        validateRange(request.getMinExperience(), request.getMaxExperience(), "Experience");
+        validateRange(request.getMinSalary(), request.getMaxSalary(), "Salary");
+
+        jd.setTitle(request.getTitle());
+        jd.setDescription(request.getDescription());
+        jd.setSkills(request.getSkills());
+        jd.setLocation(request.getLocation());
+        jd.setMinSalary(request.getMinSalary());
+        jd.setMaxSalary(request.getMaxSalary());
+        jd.setMinExperience(request.getMinExperience());
+        jd.setMaxExperience(request.getMaxExperience());
+        jd.setJobType(request.getJobType());
+
+        LOGGER.info("JD updated with id: {}", id);
+
+        return jobDescriptionMapper.toResponse(jobDescriptionRepository.save(jd));
+    }
+@Override
+public void delete(Long id, String email) {
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+    if (!user.getRole().name().equals("HR")) {
+        throw new BadRequestException("Only HR can delete job");
+    }
+
+    JobDescription jd = jobDescriptionRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("Job not found"));
+
+    jobDescriptionRepository.delete(jd); 
+
+    LOGGER.info("Job permanently deleted with id: {}", id);
+}
+ @Override
+ public JobDescriptionResponse getById(Long id) {
+
+     JobDescription jd = jobDescriptionRepository.findById(id)
+             .orElseThrow(() -> new BadRequestException("Job not found"));
+
+            LOGGER.info("HR fetching  job by id");
+     return jobDescriptionMapper.toResponse(jd);
+ }
+
+@Override
+public List<JobDescriptionResponse> findAllForHR() {
+
+    LOGGER.info("HR fetching all jobs");
+
+    return jobDescriptionRepository.findAllByOrderByCreatedAtDesc()
+            .stream()
+            .map(jobDescriptionMapper::toResponse)
+            .toList();
+}
+
+@Override
+public void toggleActive(Long id, String email) {
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+    if (!user.getRole().name().equals("HR")) {
+        throw new BadRequestException("Only HR can change job status");
+    }
+
+    JobDescription jd = jobDescriptionRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("Job not found"));
+
+    jd.setActive(!jd.isActive()); 
+
+    jobDescriptionRepository.save(jd);
+    LOGGER.info("User {} toggling job id {}", email, id);
+}
+
 }
