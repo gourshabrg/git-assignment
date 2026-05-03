@@ -8,4 +8,5 @@ import java.util.List;
 public interface JobDescriptionRepository extends JpaRepository<JobDescription, Long> {
 
     List<JobDescription> findByActiveTrueOrderByCreatedAtDesc();
+    List<JobDescription> findAllByOrderByCreatedAtDesc();
 }

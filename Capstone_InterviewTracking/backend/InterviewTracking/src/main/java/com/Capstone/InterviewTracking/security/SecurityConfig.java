@@ -4,13 +4,16 @@ import com.Capstone.InterviewTracking.constant.AppConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 public class SecurityConfig {
@@ -31,12 +34,17 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(AppConstants.AUTH_MATCHER).permitAll()
-                    .requestMatchers(HttpMethod.GET, AppConstants.JOB_MATCHER).permitAll()
+                          // Public auth
+                   .requestMatchers(AppConstants.AUTH_MATCHER).permitAll()
+                    .requestMatchers(AppConstants.JOB_HR_PATH).hasRole("HR")        
+                    .requestMatchers(HttpMethod.PUT, AppConstants.JOB_TOGGLE_PATH).hasRole("HR")
+                    .requestMatchers(HttpMethod.GET,  AppConstants.JOB_LIST_PATH).permitAll()
+                    .requestMatchers(HttpMethod.GET, AppConstants.JOB_BY_ID_PATH).permitAll() 
                     .requestMatchers(AppConstants.JOB_MATCHER).hasRole("HR")
                     .requestMatchers(AppConstants.HR_MATCHER).hasRole("HR")
                     .requestMatchers(AppConstants.PANEL_MATCHER).hasRole("PANEL")
                     .requestMatchers(AppConstants.CANDIDATE_MATCHER).hasRole("CANDIDATE")
+                    
                     .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -48,4 +56,9 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    return config.getAuthenticationManager();
+}
 }
