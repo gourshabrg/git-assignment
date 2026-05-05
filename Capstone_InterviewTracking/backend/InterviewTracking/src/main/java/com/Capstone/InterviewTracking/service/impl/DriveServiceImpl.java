@@ -22,7 +22,7 @@ public class DriveServiceImpl implements DriveService {
 
     private static final String APPLICATION_NAME = "Interview Tracking";
 
-    // 👉 PUT YOUR GOOGLE DRIVE FOLDER ID HERE
+    //  PUT YOUR GOOGLE DRIVE FOLDER ID HERE
     private static final String FOLDER_ID = AppConstants.DRIVE_FOLDER_ID;
 
     @Autowired
@@ -48,7 +48,7 @@ public class DriveServiceImpl implements DriveService {
             File fileMetadata = new File();
             fileMetadata.setName(file.getOriginalFilename());
 
-            // ✅ store inside your folder
+            // store inside your folder
             fileMetadata.setParents(Collections.singletonList(FOLDER_ID));
 
             java.io.File tempFile = java.io.File.createTempFile("resume-", ".pdf");
