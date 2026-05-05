@@ -6,7 +6,6 @@ import com.Capstone.InterviewTracking.entity.User;
 import com.Capstone.InterviewTracking.enums.RoleType;
 import com.Capstone.InterviewTracking.repository.PanelRepository;
 import com.Capstone.InterviewTracking.repository.UserRepository;
-import com.Capstone.InterviewTracking.service.EmailServiceImpl;
 import com.Capstone.InterviewTracking.service.PanelService;
 
 import org.springframework.stereotype.Service;

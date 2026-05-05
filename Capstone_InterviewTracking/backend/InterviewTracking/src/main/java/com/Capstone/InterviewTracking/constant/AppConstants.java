@@ -19,6 +19,8 @@ public final class AppConstants {
     public static final String JOB_TOGGLE_PATH = JOB_BASE_PATH + "/*/toggle";
     public static final String JOB_LIST_PATH = JOB_BASE_PATH;          
     public static final String JOB_BY_ID_PATH = JOB_BASE_PATH + "/*";
+    public static final String CANDIDATE_JOB_APPLY = CANDIDATE_BASE_PATH + "/apply";
+    public static final String HR_CREATE_CANDIDATE = HR_BASE_PATH + "/candidates";
 
     public static final String AUTH_MATCHER = AUTH_BASE_PATH + "/**";
     public static final String HR_MATCHER = HR_BASE_PATH + "/**";
@@ -30,6 +32,7 @@ public final class AppConstants {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String ROLE_PREFIX = "ROLE_";
     public static final String ALL_PATHS = "/**";
+    public static final String DRIVE_FOLDER_ID = "1XT5Us7SJseIH-MyiKzLsuS17on7c_tZn";
 
     public static final String EMAIL_LINK_STRING = "http://127.0.0.1:5500/Capstone_InterviewTracking/frontend/pages/auth/set-password.html?token=";
     public static final String EMAIL_SUBJECT = "Complete Your Account Setup – Set Your Password";
