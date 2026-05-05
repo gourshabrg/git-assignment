@@ -35,3 +35,5 @@ build/
 
 # Ignore local secrets
 src/main/resources/application.properties
+src/main/resources/credentials.json
+token/StoredCredential
