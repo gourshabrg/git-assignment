@@ -1,4 +1,4 @@
-package com.Capstone.InterviewTracking.service;
+package com.Capstone.InterviewTracking.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -6,11 +6,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import com.Capstone.InterviewTracking.constant.AppConstants;
 import com.Capstone.InterviewTracking.exception.EmailSendingException;
+import com.Capstone.InterviewTracking.service.EmailService;
 
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-public class EmailServiceImpl {
+public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
     public void sendVerificationMail(String email, String name , String token) {

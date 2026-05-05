@@ -1,51 +1,32 @@
-package com.Capstone.InterviewTracking.entity;
+package com.Capstone.InterviewTracking.dto;
 
-import com.Capstone.InterviewTracking.enums.*;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
-/**
- * Candidate profile and hiring pipeline details linked with a job description and user account.
- */
-@Entity
-@Table(name = "candidate")
-public class Candidate extends BaseEntity {
+public class CandidateRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @NotBlank(message = "Full name is required")
     private String fullName;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email")
     private String email;
+
+    @NotBlank(message = "Mobile is required")
     private String mobile;
-    private String resumeUrl;
+
+    @NotNull(message = "Job ID is required")
+    private Long jobId;
 
     private String currentCompany;
     private Double totalExperience;
     private Double relevantExperience;
-
     private Double currentCtc;
     private Double expectedCtc;
-
     private Integer noticePeriod;
     private String preferredLocation;
     private String source;
 
-    @ManyToOne
-    @JoinColumn(name = "jd_id")
-    private JobDescription jobDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    // @Enumerated(EnumType.STRING)
-    // private InterviewStage stage;
-
-    // @Enumerated(EnumType.STRING)
-    // private ApplicationStatus status;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
@@ -56,8 +37,8 @@ public class Candidate extends BaseEntity {
     public String getMobile() { return mobile; }
     public void setMobile(String mobile) { this.mobile = mobile; }
 
-    public String getResumeUrl() { return resumeUrl; }
-    public void setResumeUrl(String resumeUrl) { this.resumeUrl = resumeUrl; }
+    public Long getJobId() { return jobId; }
+    public void setJobId(Long jobId) { this.jobId = jobId; }
 
     public String getCurrentCompany() { return currentCompany; }
     public void setCurrentCompany(String currentCompany) { this.currentCompany = currentCompany; }
@@ -82,16 +63,4 @@ public class Candidate extends BaseEntity {
 
     public String getSource() { return source; }
     public void setSource(String source) { this.source = source; }
-
-    public JobDescription getJobDescription() { return jobDescription; }
-    public void setJobDescription(JobDescription jobDescription) { this.jobDescription = jobDescription; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-
-    // public InterviewStage getStage() { return stage; }
-    // public void setStage(InterviewStage stage) { this.stage = stage; }
-
-    // public ApplicationStatus getStatus() { return status; }
-    // public void setStatus(ApplicationStatus status) { this.status = status; }
 }

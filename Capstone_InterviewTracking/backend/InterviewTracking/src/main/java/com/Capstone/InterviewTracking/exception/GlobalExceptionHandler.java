@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiResponse<Void>> handleBadRequest(BadRequestException ex) {
         return ResponseEntity
-                .badRequest()
+                .status(HttpStatus.CONFLICT)
                 .body(ApiResponse.failure(ex.getMessage()));
     }
 
