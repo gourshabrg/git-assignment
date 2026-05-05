@@ -1,6 +1,6 @@
 package com.Capstone.InterviewTracking.entity;
 
-import com.Capstone.InterviewTracking.enums.*;
+//import com.Capstone.InterviewTracking.enums.*;
 import jakarta.persistence.*;
 
 /**
