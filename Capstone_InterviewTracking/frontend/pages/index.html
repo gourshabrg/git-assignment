@@ -1,1 +1,146 @@
-<!-- for file adding -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Tracking Platform - Find Your Dream Job</title>
+  <link rel="stylesheet" href="../styles/auth/auth.css">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/home.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <div class="brand-mark">IT</div>
+        <span class="brand-name">Interview Tracking</span>
+      </div>
+      <div class="navbar-actions">
+        <button class="btn-secondary btn-small" onclick="window.location.href='./auth/login.html'">Login</button>
+        <button class="btn-secondary btn-small" onclick="window.location.href='./auth/signup.html'">Sign Up</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Welcome to Interview Tracking Platform</h1>
+        <p class="hero-subtitle">Streamline your hiring process and find the perfect candidates for your team</p>
+
+        <div class="hero-actions">
+          <button class="btn" onclick="scrollToJobs()">Explore Jobs</button>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <h3>500+</h3>
+          <p>Active Jobs</p>
+        </div>
+        <div class="stat-card">
+          <h3>10K+</h3>
+          <p>Candidates</p>
+        </div>
+        <div class="stat-card">
+          <h3>95%</h3>
+          <p>Success Rate</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2>About Our Platform</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">👤</div>
+          <h3>Candidate Portal</h3>
+          <p>Apply to jobs, track your applications, and manage your interview schedule in one place.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍💼</div>
+          <h3>HR Dashboard</h3>
+          <p>Manage job postings, review applications, and track candidate progress efficiently.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Interview Schedule</h3>
+          <p>Automated scheduling, reminders, and feedback management for all interviews.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Analytics & Reports</h3>
+          <p>Comprehensive insights into your hiring pipeline and candidate data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOBS LISTING SECTION -->
+  <section class="jobs-section" id="jobs">
+    <div class="container">
+      <h2>Featured Job Openings</h2>
+      <p class="section-subtitle">Browse our latest job opportunities and apply today</p>
+
+      <div class="jobs-grid" id="jobsGrid">
+        <!-- Jobs will be loaded here by JavaScript -->
+        <div class="loading">Loading jobs...</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Start Your Journey?</h2>
+      <p>Join thousands of candidates and companies using our platform</p>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Interview Tracking</h4>
+          <p>Your trusted platform for hiring and career growth.</p>
+        </div>
+        <div class="footer-section">
+          <h4>For Candidates</h4>
+          <ul>
+            <li><a href="#jobs">Browse Jobs</a></li>
+            <li><a href="./auth/signup.html">Create Account</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>For Companies</h4>
+          <ul>
+            <li><a href="./auth/login.html">Post a Job</a></li>
+            <li><a href="./auth/login.html">HR Login</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Interview Tracking Platform. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal" id="jobModal">
+    <div class="modal-content">
+      <!-- <button class="modal-close" onclick="closeJobModal()"></button> -->
+      <div id="jobDetailsContent">
+        <!-- Job details will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../scripts/main/home.js"></script>
+</body>
+
+</html>
