@@ -1,5 +1,6 @@
 import { loginApi, signupApi, setPasswordApi } from "../api/auth-api.js";
 import { saveAuthUser, saveToken } from "../utils/storage.js";
+import { validatePassword, validateEmail } from "../utils/validation.js";
 
 const loginForm = document.getElementById("login-form");
 const signupBtn = document.getElementById("signup-btn");
@@ -14,18 +15,24 @@ if (loginForm) {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const error = document.getElementById("error");
-
     error.innerText = "";
+    if (!email || !password) {
+      error.innerText = "Email and password are required";
+      return;
+    }
+    if (!validateEmail(email)) {
+      error.innerText = "invalid email";
+      return;
+    }
 
     try {
+      //const encodedPassword = encodeBase64(password);
       const data = await loginApi({ email, password });
       saveToken(data.token);
       saveAuthUser({
         email: data.email,
         role: data.role,
       });
-
-      alert("Login success");
     } catch (err) {
       console.error(err);
       error.innerText = err.message;
@@ -49,6 +56,11 @@ if (signupForm) {
       alert("Date of birth cannot be in future");
       return;
     }
+    if (!validateEmail(email)) {
+      error.innerText = "invalid email";
+      return;
+    }
+
     try {
       //  START LOADING
       loader.classList.remove("hidden");
@@ -58,10 +70,8 @@ if (signupForm) {
 
       await signupApi({ fullName: name, email, phone, dob, gender });
 
-      alert("Verification email sent set password and login !");
       window.location.href = "login.html";
     } catch (err) {
-      // alert("Signup failed");
       console.error(err);
       if (err.message) {
         error.innerText = err.message;
@@ -69,7 +79,6 @@ if (signupForm) {
         error.innerText = "Something went wrong";
       }
     } finally {
-      //  STOP LOADING
       loader.classList.add("hidden");
       btnText.textContent = "Send setup link";
       signupBtn.disabled = false;
@@ -109,21 +118,19 @@ if (setPasswordForm) {
       return;
     }
 
-    if (password.length < 6) {
-      error.innerText = "Password must be at least 6 characters";
+    const errors = validatePassword(password);
+    if (errors.length > 0) {
+      error.innerText = errors.join("\n");
       return;
     }
-
     if (password !== confirmPassword) {
       error.innerText = "Passwords do not match";
       return;
     }
 
     try {
+      // const encodedPassword = encodeBase64(password);
       await setPasswordApi({ token, password });
-
-      alert("Password set successfully!");
-
       window.location.href = "login.html";
     } catch (err) {
       console.error(err);
