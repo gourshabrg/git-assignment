@@ -1,44 +1,28 @@
-package com.Capstone.InterviewTracking.entity;
+package com.Capstone.InterviewTracking.dto;
 
 import com.Capstone.InterviewTracking.enums.FeedbackStatus;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "feedback")
-public class Feedback extends BaseEntity {
+public class FeedbackRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "interview_id")
-    private Interview interview;
-
-    @ManyToOne
-    @JoinColumn(name = "panel_id", nullable = true)
-    private Panel panel;
-
-    private String hrReviewer;
-
+    @NotBlank(message = "Comments are required")
     private String comments;
+
     private String strengths;
     private String weaknesses;
+
+    @NotBlank(message = "Areas covered is required")
     private String areasCovered;
 
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 5, message = "Rating must be at most 5")
     private int rating;
 
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Status is required")
     private FeedbackStatus status;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Interview getInterview() { return interview; }
-    public void setInterview(Interview interview) { this.interview = interview; }
-
-    public Panel getPanel() { return panel; }
-    public void setPanel(Panel panel) { this.panel = panel; }
 
     public String getComments() { return comments; }
     public void setComments(String comments) { this.comments = comments; }
@@ -57,7 +41,4 @@ public class Feedback extends BaseEntity {
 
     public FeedbackStatus getStatus() { return status; }
     public void setStatus(FeedbackStatus status) { this.status = status; }
-
-    public String getHrReviewer() { return hrReviewer; }
-    public void setHrReviewer(String hrReviewer) { this.hrReviewer = hrReviewer; }
 }
