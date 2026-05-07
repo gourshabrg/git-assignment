@@ -4,102 +4,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interview Tracking Platform - Find Your Dream Job</title>
-  <link rel="stylesheet" href="../styles/auth/auth.css">
+  <title>Interview Tracking Platform — Find Your Dream Job</title>
   <link rel="stylesheet" href="../styles/style.css">
   <link rel="stylesheet" href="../styles/home.css">
 </head>
 
 <body>
-  <nav class="navbar">
+
+  <nav class="navbar" aria-label="Site navigation">
     <div class="navbar-container">
-      <div class="navbar-brand">
-        <div class="brand-mark">IT</div>
+      <a class="navbar-brand" href="#">
+        <div class="brand-mark" aria-hidden="true">IT</div>
         <span class="brand-name">Interview Tracking</span>
-      </div>
+      </a>
       <div class="navbar-actions">
-        <button class="btn-secondary btn-small" onclick="window.location.href='./auth/login.html'">Login</button>
-        <button class="btn-secondary btn-small" onclick="window.location.href='./auth/signup.html'">Sign Up</button>
+        <div id="nav-guest" style="display:flex;gap:12px;">
+          <button class="btn-secondary btn-small"
+                  onclick="window.location.href='./auth/login.html'"
+                  type="button" aria-label="Log in to your account">Login</button>
+          <button class="btn-secondary btn-small"
+                  onclick="window.location.href='./auth/signup.html'"
+                  type="button" aria-label="Create a new account">Sign Up</button>
+        </div>
+        <div id="nav-user" style="display:none;align-items:center;gap:14px;">
+          <div class="nav-user-info">
+            <div class="nav-avatar" id="nav-avatar" aria-hidden="true"></div>
+            <span class="nav-username" id="nav-username"></span>
+          </div>
+          <button class="nav-action-btn nav-dashboard-btn" id="nav-dashboard-btn"
+                  onclick="goToDashboard()" type="button">My Dashboard</button>
+          <button class="nav-action-btn nav-logout-btn"
+                  onclick="homeLogout()" type="button" aria-label="Sign out">Logout</button>
+        </div>
       </div>
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
+  <section class="hero" aria-labelledby="hero-heading">
     <div class="container">
       <div class="hero-content">
-        <h1>Welcome to Interview Tracking Platform</h1>
+        <h1 id="hero-heading">Welcome to Interview Tracking Platform</h1>
         <p class="hero-subtitle">Streamline your hiring process and find the perfect candidates for your team</p>
-
         <div class="hero-actions">
-          <button class="btn" onclick="scrollToJobs()">Explore Jobs</button>
-        </div>
-      </div>
-
-      <div class="hero-stats">
-        <div class="stat-card">
-          <h3>500+</h3>
-          <p>Active Jobs</p>
-        </div>
-        <div class="stat-card">
-          <h3>10K+</h3>
-          <p>Candidates</p>
-        </div>
-        <div class="stat-card">
-          <h3>95%</h3>
-          <p>Success Rate</p>
+          <button class="btn" onclick="scrollToJobs()" type="button">Explore Jobs</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES SECTION -->
-  <section class="features" id="features">
+  <section class="features" id="features" aria-labelledby="features-heading">
     <div class="container">
-      <h2>About Our Platform</h2>
+      <h2 id="features-heading">About Our Platform</h2>
       <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">👤</div>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">👤</div>
           <h3>Candidate Portal</h3>
           <p>Apply to jobs, track your applications, and manage your interview schedule in one place.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">👨‍💼</div>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">👨‍💼</div>
           <h3>HR Dashboard</h3>
           <p>Manage job postings, review applications, and track candidate progress efficiently.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📅</div>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📅</div>
           <h3>Interview Schedule</h3>
           <p>Automated scheduling, reminders, and feedback management for all interviews.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Analytics & Reports</h3>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📊</div>
+          <h3>Analytics &amp; Reports</h3>
           <p>Comprehensive insights into your hiring pipeline and candidate data.</p>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- JOBS LISTING SECTION -->
-  <section class="jobs-section" id="jobs">
+  <section class="jobs-section" id="jobs" aria-labelledby="jobs-heading">
     <div class="container">
-      <h2>Featured Job Openings</h2>
+      <h2 id="jobs-heading">Featured Job Openings</h2>
       <p class="section-subtitle">Browse our latest job opportunities and apply today</p>
-
-      <div class="jobs-grid" id="jobsGrid">
-        <!-- Jobs will be loaded here by JavaScript -->
+      <div class="jobs-grid" id="jobsGrid" role="region" aria-live="polite" aria-label="Job listings">
         <div class="loading">Loading jobs...</div>
       </div>
     </div>
   </section>
 
-  <section class="cta">
+  <section class="cta" aria-labelledby="cta-heading">
     <div class="container">
-      <h2>Ready to Start Your Journey?</h2>
+      <h2 id="cta-heading">Ready to Start Your Journey?</h2>
       <p>Join thousands of candidates and companies using our platform</p>
-
     </div>
   </section>
 
@@ -131,12 +125,11 @@
     </div>
   </footer>
 
-  <div class="modal" id="jobModal">
+  <div class="modal" id="jobModal"
+       role="dialog" aria-modal="true" aria-labelledby="job-modal-title" aria-hidden="true">
     <div class="modal-content">
-      <!-- <button class="modal-close" onclick="closeJobModal()"></button> -->
-      <div id="jobDetailsContent">
-        <!-- Job details will be populated here -->
-      </div>
+      <button class="modal-close" onclick="closeJobModal()" type="button" aria-label="Close job details">&#x2715;</button>
+      <div id="jobDetailsContent"></div>
     </div>
   </div>
 
