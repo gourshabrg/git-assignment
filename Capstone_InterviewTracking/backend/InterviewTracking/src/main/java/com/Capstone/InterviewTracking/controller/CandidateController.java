@@ -3,6 +3,7 @@ package com.Capstone.InterviewTracking.controller;
 import com.Capstone.InterviewTracking.constant.AppConstants;
 import com.Capstone.InterviewTracking.dto.ApiResponse;
 import com.Capstone.InterviewTracking.dto.ApplicationResponse;
+import com.Capstone.InterviewTracking.dto.CandidateDetailResponse;
 import com.Capstone.InterviewTracking.service.CandidateService;
 
 import org.springframework.http.HttpStatus;
@@ -78,5 +79,11 @@ public ResponseEntity<ApiResponse<ApplicationResponse>> apply(
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Candidate created", response));
+    }
+
+    @GetMapping(AppConstants.CANDIDATE_MY_APPLICATION)
+    public ResponseEntity<ApiResponse<CandidateDetailResponse>> getMyApplication(Authentication authentication) {
+        CandidateDetailResponse response = service.getMyApplication(authentication.getName());
+        return ResponseEntity.ok(ApiResponse.success("Application fetched", response));
     }
 }

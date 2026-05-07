@@ -3,9 +3,11 @@ package com.Capstone.InterviewTracking.service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.Capstone.InterviewTracking.dto.ApplicationResponse;
-
+import com.Capstone.InterviewTracking.dto.CandidateDetailResponse;
 
 public interface CandidateService {
+
+    CandidateDetailResponse getMyApplication(String email);
 
     ApplicationResponse applyCandidate(
             String fullName, String email, String mobile, String dob,
