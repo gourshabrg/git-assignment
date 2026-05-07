@@ -1,16 +1,25 @@
-import { getToken } from "../utils/storage.js";
+import { getToken, clearAuth } from "../utils/storage.js";
 import { SITE_CONFIG } from "../config/site-config.js";
+
+function handleUnauthorized() {
+  clearAuth();
+  const url = window.location.href;
+  const pagesIdx = url.indexOf("/pages/");
+  window.location.replace(
+    pagesIdx !== -1
+      ? url.substring(0, pagesIdx) + "/pages/auth/login.html"
+      : "./auth/login.html"
+  );
+}
 
 export async function fetchHandler(path, options = {}) {
   const headers = new Headers(options.headers || {});
   const token = getToken();
 
-  // Set content type
   if (!headers.has("Content-Type") && options.body) {
     headers.set("Content-Type", "application/json");
   }
 
-  // Add auth token if available
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
@@ -24,6 +33,34 @@ export async function fetchHandler(path, options = {}) {
   });
 
   const data = await readResponse(response);
+
+  if (response.status === 401) {
+    handleUnauthorized();
+    throw new Error("Session expired. Please log in again.");
+  }
+
+  if (!response.ok) {
+    throw new Error(data?.message || "Request failed");
+  }
+
+  return data?.data ?? data;
+}
+
+export async function fetchMultipart(path, formData) {
+  const token = getToken();
+  const headers = new Headers();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const url = `${SITE_CONFIG.API_URL}${path}`;
+  const response = await fetch(url, { method: "POST", headers, body: formData });
+  const data = await readResponse(response);
+
+  if (response.status === 401) {
+    handleUnauthorized();
+    throw new Error("Session expired. Please log in again.");
+  }
 
   if (!response.ok) {
     throw new Error(data?.message || "Request failed");

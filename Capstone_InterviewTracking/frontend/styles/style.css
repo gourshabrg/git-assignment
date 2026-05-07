@@ -3,24 +3,21 @@
 }
 
 :root {
-  /* Primary Colors */
+
   --primary: #0f766e;
   --primary-hover: #115e59;
   --primary-light: rgba(15, 118, 110, 0.14);
 
-  /* Text Colors */
   --text-dark: #111827;
   --text-normal: #1f2937;
   --text-muted: #4b5563;
   --text-label: #374151;
 
-  /* Background & Borders */
   --bg-main: #f7fafc;
   --bg-white: #ffffff;
   --border-normal: #cbd5e1;
   --border-light: #dbe3ea;
 
-  /* Status Colors */
   --status-error: #b91c1c;
   --status-error-light: #fee2e2;
   --status-pending-bg: #fef3c7;
@@ -28,7 +25,6 @@
   --status-success-bg: #d1f0e8;
   --status-success-text: #0f766e;
 
-  /* Shadows */
   --shadow-premium: 0 18px 45px rgba(15, 23, 42, 0.12);
   --shadow-card: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
@@ -48,9 +44,18 @@ body {
   color: var(--text-normal);
 }
 
-/* ============================================
-   TYPOGRAPHY
-   ============================================ */
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  color: var(--bg-white);
+  background: var(--primary);
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
 
 h1 {
   margin: 0;
@@ -91,6 +96,18 @@ label {
   font-weight: 700;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: var(--primary);
@@ -107,10 +124,6 @@ label {
   line-height: 1.5;
   margin-top: 4px;
 }
-
-/* ============================================
-   BUTTONS
-   ============================================ */
 
 button,
 .btn,
@@ -144,7 +157,6 @@ button:disabled,
   opacity: 0.6;
 }
 
-/* Secondary Button */
 .btn-secondary {
   background: transparent;
   color: var(--primary);
@@ -152,6 +164,7 @@ button:disabled,
   padding: 9px 12px;
   min-height: 44px;
   font-weight: 700;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
@@ -159,7 +172,6 @@ button:disabled,
   color: var(--bg-white);
 }
 
-/* Danger Button */
 .btn-danger {
   background: var(--status-error);
 }
@@ -168,12 +180,10 @@ button:disabled,
   background: #991b1b;
 }
 
-/* Block Button */
 .btn-block {
   width: 100%;
 }
 
-/* Small Button */
 .btn-small {
   min-height: 36px;
   padding: 8px 18px;
@@ -181,10 +191,6 @@ button:disabled,
   white-space: nowrap;
   min-width: 90px;
 }
-
-/* ============================================
-   FORMS
-   ============================================ */
 
 .form-group {
   margin-bottom: 20px;
@@ -221,12 +227,10 @@ textarea:focus {
   box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-input:invalid:not(:placeholder-shown),
-select:invalid:not(:placeholder-shown) {
+input:not([type="date"]):not([type="datetime-local"]):not([type="time"]):not([type="checkbox"]):not([type="radio"]):invalid:not(:placeholder-shown) {
   border-color: var(--status-error);
 }
 
-/* Error message */
 .error-message {
   color: var(--status-error);
   font-size: 14px;
@@ -238,7 +242,6 @@ select:invalid:not(:placeholder-shown) {
   display: block;
 }
 
-/* Success message */
 .success-message {
   color: var(--primary);
   font-size: 14px;
@@ -249,10 +252,6 @@ select:invalid:not(:placeholder-shown) {
 .success-message.show {
   display: block;
 }
-
-/* ============================================
-   CARDS & PANELS
-   ============================================ */
 
 .panel,
 .card {
@@ -281,10 +280,6 @@ select:invalid:not(:placeholder-shown) {
   box-shadow: var(--shadow-premium);
   border-color: var(--primary);
 }
-
-/* ============================================
-   BADGES & STATUS
-   ============================================ */
 
 .badge {
   display: inline-block;
@@ -325,10 +320,6 @@ select:invalid:not(:placeholder-shown) {
   background: rgba(37, 99, 235, 0.1);
   color: #2563eb;
 }
-
-/* ============================================
-   LAYOUT HELPERS
-   ============================================ */
 
 .container {
   max-width: 1200px;
@@ -418,10 +409,6 @@ select:invalid:not(:placeholder-shown) {
   padding: 32px;
 }
 
-/* ============================================
-   MODAL
-   ============================================ */
-
 .modal {
   display: none;
   position: fixed;
@@ -455,19 +442,25 @@ select:invalid:not(:placeholder-shown) {
 
 .modal-close {
   float: right;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 20px;
   cursor: pointer;
   color: var(--text-muted);
   background: none;
   border: none;
-  padding: 0;
+  outline: none;
+  box-shadow: none;
+  padding: 4px 8px;
   margin: -5px -5px 16px 0;
-  min-height: auto;
+  min-height: unset;
   margin-top: 0;
+  border-radius: 4px;
+  line-height: 1;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .modal-close:hover {
+  background: var(--bg-main);
   color: var(--text-dark);
 }
 
@@ -490,10 +483,6 @@ select:invalid:not(:placeholder-shown) {
     opacity: 1;
   }
 }
-
-/* ============================================
-   TABLES
-   ============================================ */
 
 table {
   width: 100%;
@@ -522,10 +511,6 @@ tbody td {
 tbody tr:hover {
   background: var(--bg-main);
 }
-
-/* ============================================
-   UPLOAD PROGRESS
-   ============================================ */
 
 .upload-progress {
   display: none;
@@ -557,10 +542,6 @@ tbody tr:hover {
   font-size: 12px;
   color: var(--text-muted);
 }
-
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
 
 @media (max-width: 768px) {
   h1 {
