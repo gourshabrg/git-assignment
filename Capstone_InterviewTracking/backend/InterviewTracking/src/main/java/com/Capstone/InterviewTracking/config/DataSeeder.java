@@ -16,7 +16,7 @@ public class DataSeeder {
                                       PasswordEncoder passwordEncoder) {
 
         return args -> {
-            String hrEmail = "hr@gmail.com";
+            String hrEmail = "vingo.food.service@gmail.com";
             if (userRepository.findByEmail(hrEmail).isEmpty()) {
 
                 User hr = new User();
@@ -25,14 +25,13 @@ public class DataSeeder {
 
                 hr.setRole(RoleType.HR);
 
-              
                 hr.setVerified(true);
 
                 userRepository.save(hr);
 
-                System.out.println(" gm:hr@gmail.com , password:123456 HR user created successfully");
+                System.out.println(" gm:vingo.food.service@gmail.com , password:123456 HR user created successfully");
             } else {
-                System.out.println("  gm:hr@gmail.com , password:123456 HR already exists");
+                System.out.println("  gm:vingo.food.service@gmail.com , password:123456 HR already exists");
             }
         };
     }

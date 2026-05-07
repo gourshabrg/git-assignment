@@ -41,36 +41,29 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authHeader.substring(AppConstants.BEARER_PREFIX.length());
 
             try {
-                if (!jwtUtil.validateToken(token)) {
-                    sendUnauthorized(response, "Invalid or expired token");
-                    return;
+                if (jwtUtil.validateToken(token)) {
+                    String email = jwtUtil.extractEmail(token);
+                    String role = jwtUtil.extractRole(token);
+
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    List.of(new SimpleGrantedAuthority(AppConstants.ROLE_PREFIX + role))
+                            );
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                } else {
+
+                    SecurityContextHolder.clearContext();
                 }
-
-                String email = jwtUtil.extractEmail(token);
-                String role = jwtUtil.extractRole(token);
-
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                List.of(new SimpleGrantedAuthority(AppConstants.ROLE_PREFIX + role))
-                        );
-
-                SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException | IllegalArgumentException ex) {
                 LOGGER.warn("JWT authentication failed: {}", ex.getMessage());
-                sendUnauthorized(response, "Invalid or expired token");
-                return;
+                SecurityContextHolder.clearContext();
             }
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private void sendUnauthorized(HttpServletResponse response, String message) throws IOException {
-        SecurityContextHolder.clearContext();
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"success\":false,\"message\":\"" + message + "\",\"data\":null,\"errors\":[\"" + message + "\"]}");
-    }
 }

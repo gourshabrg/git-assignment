@@ -20,11 +20,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.UUID;
 import java.util.Optional;
-
-
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-     
+
    private final EmailService emailService;
 
       public AuthServiceImpl(UserRepository userRepository,
@@ -47,16 +47,16 @@ public class AuthServiceImpl implements AuthService {
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
-        this.emailService = emailService; 
+        this.emailService = emailService;
     }
-  // register without password, send verification mail with token
+
     @Override
    public void register(SignupRequest request) {
 
        String email = request.getEmail().trim().toLowerCase();
        String name = request.getFullName().trim();
         Optional<User> existingUser = userRepository.findByEmail(email);
-       
+
         if (existingUser.isPresent()) {
             User user = existingUser.get();
 
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
             return;
         }
-        
+
     User user = userMapper.toUserForSignup(email, RoleType.CANDIDATE);
 
     String verificationToken = UUID.randomUUID().toString();
@@ -91,11 +91,9 @@ public class AuthServiceImpl implements AuthService {
     LOGGER.info("User registered, verification email sent: {}", email);
 
     emailService.sendVerificationMail(email, name, verificationToken);
-    
+
     }
 
-    
-    // set password and verify user
      public void setPassword(String token, String password) {
 
         User user = userRepository.findByVerificationToken(token)
@@ -109,7 +107,8 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Link expired");
         }
 
-        user.setPassword(passwordEncoder.encode(password));
+        String decodedPassword = new String(Base64.getDecoder().decode(password), StandardCharsets.UTF_8);
+        user.setPassword(passwordEncoder.encode(decodedPassword));
 
         user.setVerified(true);
 
@@ -135,7 +134,8 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentialsException("Please verify your email first");
         }
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        String decodedPassword = new String(Base64.getDecoder().decode(request.getPassword()), StandardCharsets.UTF_8);
+        if (!passwordEncoder.matches(decodedPassword, user.getPassword())) {
             LOGGER.warn("Login failed because password was invalid for email: {}", email);
             throw new InvalidCredentialsException("Invalid password");
         }
