@@ -4,11 +4,13 @@ import com.Capstone.InterviewTracking.dto.PanelRequest;
 import com.Capstone.InterviewTracking.entity.Panel;
 import com.Capstone.InterviewTracking.entity.User;
 import com.Capstone.InterviewTracking.enums.RoleType;
+import com.Capstone.InterviewTracking.exception.BadRequestException;
 import com.Capstone.InterviewTracking.repository.PanelRepository;
 import com.Capstone.InterviewTracking.repository.UserRepository;
 import com.Capstone.InterviewTracking.service.PanelService;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,13 +31,17 @@ public class PanelServiceImpl implements PanelService {
     }
 
     @Override
+    @Transactional
     public void createPanel(PanelRequest request) {
 
         if (panelRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Panel email already exists");
+            throw new BadRequestException("A panel member with this email already exists");
         }
 
-        
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new BadRequestException("An account with this email already exists");
+        }
+
         User user = new User();
         user.setEmail(request.getEmail());
         user.setRole(RoleType.PANEL);
@@ -47,7 +53,6 @@ public class PanelServiceImpl implements PanelService {
 
         userRepository.save(user);
 
-     
         Panel panel = new Panel();
         panel.setFullName(request.getFullName());
         panel.setEmail(request.getEmail());
@@ -58,7 +63,11 @@ public class PanelServiceImpl implements PanelService {
 
         panelRepository.save(panel);
 
-       
-        emailService.sendVerificationMail(request.getEmail(),request.getFullName(), token);
+        try {
+            emailService.sendVerificationMail(request.getEmail(), request.getFullName(), token);
+        } catch (Exception e) {
+            System.err.println("Warning: Could not send verification email to "
+                    + request.getEmail() + " — " + e.getMessage());
+        }
     }
 }
