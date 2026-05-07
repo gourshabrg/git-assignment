@@ -4,11 +4,13 @@ import com.Capstone.InterviewTracking.dto.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.List;
 
@@ -62,20 +64,25 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.failure(ex.getMessage()));
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMaxUploadSize(MaxUploadSizeExceededException ex) {
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(413))
+                .body(ApiResponse.failure("Resume file size exceeds the 5 MB limit. Please upload a smaller file."));
+    }
+
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEmailError(EmailSendingException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.failure(ex.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception ex) {
         LOGGER.error("Unexpected request failure", ex);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.failure("Request failed"));
+                .body(ApiResponse.failure(ex.getMessage() != null ? ex.getMessage() : "Request failed"));
     }
-
-    @ExceptionHandler(EmailSendingException.class)
-public ResponseEntity<ApiResponse<Void>> handleEmailError(EmailSendingException ex) {
-
-    return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ApiResponse.failure(ex.getMessage()));
 }
-}
-
