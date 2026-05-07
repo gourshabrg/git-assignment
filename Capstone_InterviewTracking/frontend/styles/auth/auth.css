@@ -12,7 +12,6 @@ body {
     #f7fafc;
 }
 
-/* Header for top-right button */
 .auth-header {
   display: flex;
   justify-content: flex-end;
@@ -36,7 +35,6 @@ body {
   color: #ffffff;
 }
 
-/* Loader */
 .loader {
   width: 16px;
   height: 16px;
@@ -58,7 +56,6 @@ body {
   }
 }
 
-/* Blur effect */
 .blur {
   opacity: 0.5;
   pointer-events: none;
@@ -165,6 +162,41 @@ button {
 
 button:hover {
   background: #115e59;
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 44px;
+}
+
+.password-wrap .eye-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  min-height: unset;
+  margin-top: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.2s;
+  z-index: 2;
+}
+
+.password-wrap .eye-toggle:hover {
+  background: transparent;
+  color: #0f766e;
 }
 
 .error-message {
