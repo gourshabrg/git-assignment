@@ -36,7 +36,10 @@ async function loadJobs() {
         <div class="hr-job-actions">
           <button class="btn-sm btn-sm-info" onclick="editJob(${j.id})" type="button">Edit</button>
           <button class="btn-sm ${j.active ? "btn-sm-warning" : "btn-sm-success"}" onclick="toggleJob(${j.id})" type="button">${j.active ? "Deactivate" : "Activate"}</button>
-          <button class="btn-sm btn-sm-danger" onclick="deleteJob(${j.id})" type="button">Delete</button>
+          <button class="btn-sm btn-sm-danger" onclick="deleteJob(${j.id})" type="button"
+                  ${j.hasApplications ? 'disabled title="Cannot delete — candidates have applied for this job"' : ''}>
+            Delete
+          </button>
         </div>
       </article>`).join("")}</div>`;
   } catch (err) {
