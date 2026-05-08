@@ -16,6 +16,7 @@ public class JobDescriptionResponse {
     private Integer maxExperience;
     private JobType jobType;
     private boolean active;
+    private boolean hasApplications;
     private LocalDateTime createdAt;
 
     public Long getId() {
@@ -104,6 +105,14 @@ public class JobDescriptionResponse {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isHasApplications() {
+        return hasApplications;
+    }
+
+    public void setHasApplications(boolean hasApplications) {
+        this.hasApplications = hasApplications;
     }
 
     public LocalDateTime getCreatedAt() {

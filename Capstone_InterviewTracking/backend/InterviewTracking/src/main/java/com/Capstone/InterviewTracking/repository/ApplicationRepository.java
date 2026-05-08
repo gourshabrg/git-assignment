@@ -29,4 +29,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findByJob(JobDescription job);
 
     List<Application> findByStageAndStatus(InterviewStage stage, ApplicationStatus status);
+
+    boolean existsByJobAndStatusNot(JobDescription job, ApplicationStatus status);
+
+    boolean existsByJob(JobDescription job);
 }

@@ -4,9 +4,11 @@ import com.Capstone.InterviewTracking.dto.JobDescriptionRequest;
 import com.Capstone.InterviewTracking.dto.JobDescriptionResponse;
 import com.Capstone.InterviewTracking.entity.JobDescription;
 import com.Capstone.InterviewTracking.entity.User;
+import com.Capstone.InterviewTracking.enums.ApplicationStatus;
 import com.Capstone.InterviewTracking.exception.BadRequestException;
 import com.Capstone.InterviewTracking.exception.UserNotFoundException;
 import com.Capstone.InterviewTracking.mapper.JobDescriptionMapper;
+import com.Capstone.InterviewTracking.repository.ApplicationRepository;
 import com.Capstone.InterviewTracking.repository.JobDescriptionRepository;
 import com.Capstone.InterviewTracking.repository.UserRepository;
 import com.Capstone.InterviewTracking.service.JobDescriptionService;
@@ -24,13 +26,16 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
     private final JobDescriptionRepository jobDescriptionRepository;
     private final UserRepository userRepository;
     private final JobDescriptionMapper jobDescriptionMapper;
+    private final ApplicationRepository applicationRepository;
 
     public JobDescriptionServiceImpl(JobDescriptionRepository jobDescriptionRepository,
                                      UserRepository userRepository,
-                                     JobDescriptionMapper jobDescriptionMapper) {
+                                     JobDescriptionMapper jobDescriptionMapper,
+                                     ApplicationRepository applicationRepository) {
         this.jobDescriptionRepository = jobDescriptionRepository;
         this.userRepository = userRepository;
         this.jobDescriptionMapper = jobDescriptionMapper;
+        this.applicationRepository = applicationRepository;
     }
 
     @Override
@@ -112,8 +117,15 @@ public void delete(Long id, String email) {
     JobDescription jd = jobDescriptionRepository.findById(id)
             .orElseThrow(() -> new BadRequestException("Job not found"));
 
-    jobDescriptionRepository.delete(jd); 
+    boolean hasActiveApplications = applicationRepository
+            .existsByJobAndStatusNot(jd, ApplicationStatus.REJECTED);
 
+    if (hasActiveApplications) {
+        throw new BadRequestException(
+                "Cannot delete this job — candidates are still active. Deactivate the job instead.");
+    }
+
+    jobDescriptionRepository.delete(jd);
     LOGGER.info("Job permanently deleted with id: {}", id);
 }
  @Override
@@ -122,8 +134,10 @@ public void delete(Long id, String email) {
      JobDescription jd = jobDescriptionRepository.findById(id)
              .orElseThrow(() -> new BadRequestException("Job not found"));
 
-            LOGGER.info("HR fetching  job by id");
-     return jobDescriptionMapper.toResponse(jd);
+     LOGGER.info("HR fetching job by id");
+     JobDescriptionResponse r = jobDescriptionMapper.toResponse(jd);
+     r.setHasApplications(applicationRepository.existsByJob(jd));
+     return r;
  }
 
 @Override
@@ -133,7 +147,11 @@ public List<JobDescriptionResponse> findAllForHR() {
 
     return jobDescriptionRepository.findAllByOrderByCreatedAtDesc()
             .stream()
-            .map(jobDescriptionMapper::toResponse)
+            .map(jd -> {
+                JobDescriptionResponse r = jobDescriptionMapper.toResponse(jd);
+                r.setHasApplications(applicationRepository.existsByJob(jd));
+                return r;
+            })
             .toList();
 }
 
