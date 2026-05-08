@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping(AppConstants.HR_BASE_PATH)
@@ -161,6 +162,14 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Feedback fetched", feedbacks));
     }
 
+    /**
+     * Updates the hiring stage of a candidate's application.
+     * <p>
+     * Stage progression is strictly sequential: PROFILING → SCREENING → L1 → L2 → HR.
+     * Skipping stages or moving backwards is not permitted.
+     * Rejected applications cannot have their stage changed.
+     * </p>
+     */
     @PutMapping("/applications/{applicationId}/stage")
     public ResponseEntity<ApiResponse<String>> updateStage(
             @PathVariable Long applicationId,
@@ -173,14 +182,33 @@ public class HrController {
             throw new BadRequestException("Cannot update stage of a rejected application");
         }
 
-        InterviewStage newStage = InterviewStage.valueOf(request.getStage().toUpperCase());
-        application.setStage(newStage);
-
-        if (newStage == InterviewStage.HR && request.getComments() != null
-                && !request.getComments().isBlank()) {
-            application.setStatus(ApplicationStatus.SELECTED);
+        if (application.getStatus() == ApplicationStatus.SELECTED) {
+            throw new BadRequestException("Cannot update stage of a selected candidate");
         }
 
+        List<InterviewStage> stageOrder = Arrays.asList(
+                InterviewStage.PROFILING, InterviewStage.SCREENING,
+                InterviewStage.L1, InterviewStage.L2, InterviewStage.HR
+        );
+
+        InterviewStage currentStage = application.getStage();
+        InterviewStage newStage = InterviewStage.valueOf(request.getStage().toUpperCase());
+
+        int currentIdx = stageOrder.indexOf(currentStage);
+        int newIdx = stageOrder.indexOf(newStage);
+
+        if (currentIdx == stageOrder.size() - 1) {
+            throw new BadRequestException("Candidate is already at the final stage: " + currentStage.name());
+        }
+
+        if (newIdx != currentIdx + 1) {
+            throw new BadRequestException(
+                    "Stage must progress sequentially. Current: " + currentStage.name()
+                    + ". Next allowed stage: " + stageOrder.get(currentIdx + 1).name()
+            );
+        }
+
+        application.setStage(newStage);
         applicationRepository.save(application);
         return ResponseEntity.ok(ApiResponse.success("Stage updated to " + newStage.name(), null));
     }

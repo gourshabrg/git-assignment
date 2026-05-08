@@ -5,6 +5,7 @@ import com.Capstone.InterviewTracking.dto.InterviewScheduleRequest;
 import com.Capstone.InterviewTracking.dto.PanelResponse;
 import com.Capstone.InterviewTracking.entity.*;
 import com.Capstone.InterviewTracking.enums.InterviewRound;
+import com.Capstone.InterviewTracking.enums.InterviewStage;
 import com.Capstone.InterviewTracking.enums.InterviewStatus;
 import com.Capstone.InterviewTracking.exception.BadRequestException;
 import com.Capstone.InterviewTracking.repository.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,12 +36,43 @@ public class InterviewServiceImpl implements InterviewService {
         this.emailService = emailService;
     }
 
+    /**
+     * Schedules an interview for a candidate.
+     * <p>
+     * The requested interview round must correspond to the candidate's current hiring stage.
+     * Allowed progression: PROFILING→SCREENING, SCREENING→L1, L1→L2, L2→HR.
+     * Scheduling an interview for a round that does not match the candidate's current stage
+     * is not permitted — the candidate must complete each stage before advancing.
+     * </p>
+     */
     @Override
     public InterviewResponse scheduleInterview(InterviewScheduleRequest request, String hrEmail) {
         Application application = applicationRepository.findById(request.getApplicationId())
                 .orElseThrow(() -> new BadRequestException("Application not found"));
 
         Candidate candidate = application.getCandidate();
+
+        Map<InterviewStage, InterviewRound> allowedRoundForStage = Map.of(
+                InterviewStage.PROFILING, InterviewRound.SCREENING,
+                InterviewStage.SCREENING, InterviewRound.L1,
+                InterviewStage.L1,        InterviewRound.L2,
+                InterviewStage.L2,        InterviewRound.HR
+        );
+
+        InterviewRound expectedRound = allowedRoundForStage.get(application.getStage());
+        if (expectedRound == null) {
+            throw new BadRequestException(
+                    "Cannot schedule an interview — candidate is at " + application.getStage().name()
+                    + " stage with no further rounds available."
+            );
+        }
+        if (request.getRound() != expectedRound) {
+            throw new BadRequestException(
+                    "Cannot schedule " + request.getRound().name() + " interview. "
+                    + "Candidate is at " + application.getStage().name() + " stage. "
+                    + "Expected round: " + expectedRound.name()
+            );
+        }
 
         if (interviewRepository.existsByCandidateAndRound(candidate, request.getRound())) {
             throw new BadRequestException("Interview for this round is already scheduled for this candidate");
